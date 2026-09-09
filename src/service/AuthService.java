@@ -46,4 +46,38 @@ public class AuthService {
     public boolean isLoggedIn() {
         return  currentUser != null;
     }
+
+    public void updateProfile(String fullName, String email, String phone) throws IllegalArgumentException {
+        if (fullName != null) {
+            if (!ValidationUtils.isValidFullName(fullName)) throw new IllegalArgumentException("Invalid name");
+
+            this.currentUser.setFullName(fullName);
+        }
+
+        if (email != null) {
+            if (!ValidationUtils.isValidEmail(email)) throw new IllegalArgumentException("Invalid email");
+            if (this.userRepository.existsByEmail(email)) throw new IllegalArgumentException("Email already exists");
+
+            this.currentUser.setEmail(email);
+        }
+
+        if (phone != null) {
+            if (!ValidationUtils.isValidPhone(phone)) throw new IllegalArgumentException("Invalid phone");
+
+            this.currentUser.setPhone(phone);
+        }
+
+        this.userRepository.save(this.currentUser);
+    }
+
+    public void changePassword(String oldPassword, String newPassword) throws IllegalArgumentException {
+        if (!oldPassword.equals(this.currentUser.getPassword())) throw new IllegalArgumentException("Old password is incorrect");
+        if (!ValidationUtils.isValidPassword(newPassword)) throw new IllegalArgumentException("Invalid new password");
+
+        this.currentUser.setPassword(newPassword);
+
+        this.userRepository.save(this.currentUser);
+    }
+
+
 }

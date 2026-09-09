@@ -4,7 +4,6 @@ import model.User;
 import repository.UserRepository;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class InMemoryUserRepository implements UserRepository {
 
@@ -15,6 +14,7 @@ public class InMemoryUserRepository implements UserRepository {
     public void save(User user) {
         UUID id = user.getId();
         this.storage.put(id, user);
+        this.emailIndex.entrySet().removeIf(stringUUIDEntry -> stringUUIDEntry.getValue().equals(id));
         this.emailIndex.put(user.getEmail(), id);
     }
 
