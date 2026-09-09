@@ -9,10 +9,13 @@ import java.util.stream.Stream;
 public class InMemoryUserRepository implements UserRepository {
 
     private final Map<UUID, User> storage = new HashMap<>();
+    private final Map<String, UUID> emailIndex = new HashMap<>();
 
     @Override
     public void save(User user) {
-        this.storage.put(user.getId(), user);
+        UUID id = user.getId();
+        this.storage.put(id, user);
+        this.emailIndex.put(user.getEmail(), id);
     }
 
     @Override
@@ -22,7 +25,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return this.storage.values().stream().filter(user -> user.getEmail().equals(email)).findFirst();
+        return Optional.ofNullable(this.storage.get(this.emailIndex.get(email)));
     }
 
     @Override
