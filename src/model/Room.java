@@ -9,7 +9,7 @@ public class Room {
     private BigDecimal pricePerNight;
     private RoomStatus status;
 
-    public Room(String roomNumber, RoomType type, int capacity, BigDecimal pricePerNight) {
+    public Room(String roomNumber, RoomType type, int capacity, BigDecimal pricePerNight) throws IllegalArgumentException {
         this.setRoomNumber(roomNumber);
         this.setType(type);
         this.setCapacity(capacity);
@@ -21,8 +21,8 @@ public class Room {
         return roomNumber;
     }
 
-    public void setRoomNumber(String roomNumber) {
-        if (roomNumber == null || roomNumber.trim().isEmpty())
+    public void setRoomNumber(String roomNumber) throws IllegalArgumentException {
+        if (roomNumber == null || roomNumber.isBlank())
             throw new IllegalArgumentException("Empty room number");
         this.roomNumber = roomNumber.trim();
     }
@@ -31,7 +31,7 @@ public class Room {
         return type;
     }
 
-    public void setType(RoomType type) {
+    public void setType(RoomType type) throws IllegalArgumentException {
         if (type == null) {
             throw new IllegalArgumentException("Empty room type");
         }
@@ -42,7 +42,7 @@ public class Room {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(int capacity) throws IllegalArgumentException {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Negative capacity");
         }
@@ -53,7 +53,7 @@ public class Room {
         return pricePerNight;
     }
 
-    public void setPricePerNight(BigDecimal pricePerNight) {
+    public void setPricePerNight(BigDecimal pricePerNight) throws IllegalArgumentException {
         if (pricePerNight == null || pricePerNight.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Negative price");
         }
@@ -64,7 +64,7 @@ public class Room {
         return status;
     }
 
-    public void setStatus(RoomStatus status) {
+    public void setStatus(RoomStatus status) throws IllegalArgumentException {
         if (status == null) {
             throw new IllegalArgumentException("Empty status");
         }

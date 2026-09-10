@@ -10,7 +10,7 @@ public class User {
     private String phone;
     private String password;
 
-    public User(String fullName, String email, String phone, String password) {
+    public User(String fullName, String email, String phone, String password) throws IllegalArgumentException {
         this.generateId();
         this.setFullName(fullName);
         this.setEmail(email);
@@ -30,8 +30,8 @@ public class User {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        if (fullName == null || fullName.trim().isEmpty())
+    public void setFullName(String fullName) throws IllegalArgumentException {
+        if (fullName == null || fullName.isBlank())
             throw new IllegalArgumentException("Empty fullname");
         this.fullName = fullName.trim();
     }
@@ -40,8 +40,8 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        if (email == null || email.trim().isEmpty())
+    public void setEmail(String email) throws IllegalArgumentException {
+        if (email == null || email.isBlank())
             throw new IllegalArgumentException("Empty email");
         if (!email.contains("@") || !email.contains("."))
             throw new IllegalArgumentException("Invalid email format");
@@ -53,8 +53,8 @@ public class User {
         return phone;
     }
 
-    public void setPhone(String phone) {
-        if (phone == null || phone.trim().isEmpty())
+    public void setPhone(String phone) throws IllegalArgumentException {
+        if (phone == null || phone.isBlank())
             throw new IllegalArgumentException("Empty phone number");
         this.phone = phone.trim();
     }
@@ -63,7 +63,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password) throws IllegalArgumentException {
         if (password == null || password.length() < 6) {
             throw new IllegalArgumentException("Password must be at least 6 characters.");
         }

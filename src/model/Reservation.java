@@ -24,7 +24,7 @@ public class Reservation {
 
     private LocalDateTime createdAt;
 
-    public Reservation(String reservationCode, UUID userId, String roomNumber, LocalDate checkIn, LocalDate checkOut, int numberOfGuests, long numberOfNights, BigDecimal totalPrice, ReservationStatus status) {
+    public Reservation(String reservationCode, UUID userId, String roomNumber, LocalDate checkIn, LocalDate checkOut, int numberOfGuests, long numberOfNights, BigDecimal totalPrice, ReservationStatus status) throws IllegalArgumentException {
         this.generateId();
         this.setReservationCode(reservationCode);
         this.setUserId(userId);
@@ -50,8 +50,8 @@ public class Reservation {
         return reservationCode;
     }
 
-    public void setReservationCode(String reservationCode) {
-        if (reservationCode == null || reservationCode.trim().isEmpty())
+    public void setReservationCode(String reservationCode) throws IllegalArgumentException {
+        if (reservationCode == null || reservationCode.isBlank())
             throw new IllegalArgumentException("Empty reservation code");
         this.reservationCode = reservationCode.trim();
     }
@@ -60,7 +60,7 @@ public class Reservation {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(UUID userId) throws IllegalArgumentException {
         if (userId == null) {
             throw new IllegalArgumentException("No user was specified");
         }
@@ -71,8 +71,8 @@ public class Reservation {
         return roomNumber;
     }
 
-    public void setRoomNumber(String roomNumber) {
-        if (roomNumber == null || roomNumber.trim().isEmpty())
+    public void setRoomNumber(String roomNumber) throws IllegalArgumentException {
+        if (roomNumber == null || roomNumber.isBlank())
             throw new IllegalArgumentException("No room number was specified");
         this.roomNumber = roomNumber.trim();
     }
@@ -81,7 +81,7 @@ public class Reservation {
         return checkIn;
     }
 
-    public void setCheckIn(LocalDate checkIn) {
+    public void setCheckIn(LocalDate checkIn) throws IllegalArgumentException {
         if (checkIn == null) {
             throw new IllegalArgumentException("Empty check-in date");
         }
@@ -92,7 +92,7 @@ public class Reservation {
         return checkOut;
     }
 
-    public void setCheckOut(LocalDate checkOut) {
+    public void setCheckOut(LocalDate checkOut) throws IllegalArgumentException {
         if (checkOut == null) {
             throw new IllegalArgumentException("Empty checkout date");
         }
@@ -103,7 +103,7 @@ public class Reservation {
         return numberOfGuests;
     }
 
-    public void setNumberOfGuests(int numberOfGuests) {
+    public void setNumberOfGuests(int numberOfGuests) throws IllegalArgumentException {
         if (numberOfGuests <= 0) {
             throw new IllegalArgumentException("Negative number of guests");
         }
@@ -114,7 +114,7 @@ public class Reservation {
         return numberOfNights;
     }
 
-    public void setNumberOfNights(long numberOfNights) {
+    public void setNumberOfNights(long numberOfNights) throws IllegalArgumentException {
         if (numberOfNights <= 0) {
             throw new IllegalArgumentException("Negative number of nights");
         }
@@ -125,7 +125,7 @@ public class Reservation {
         return totalPrice;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) throws IllegalArgumentException {
         if (totalPrice.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Negative total price");
         }
@@ -136,7 +136,7 @@ public class Reservation {
         return status;
     }
 
-    public void setStatus(ReservationStatus status) {
+    public void setStatus(ReservationStatus status) throws IllegalArgumentException {
         if (status == null) {
             throw new IllegalArgumentException("No status was specified");
         }
