@@ -1,7 +1,6 @@
 package util;
 
 import java.math.BigDecimal;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -16,11 +15,15 @@ public class InputUtils {
     public static String readString() {
         while (true) {
             String input = scanner.nextLine();
-            if (ValidationUtils.isNotEmpty(input)) {
+            if (ValidationUtils.isNotBlank(input)) {
                 return  input.trim();
             }
             System.out.println("This field cannot be empty. Try again");
         }
+    }
+
+    public static String readOptionalString() {
+        return scanner.nextLine().trim();
     }
 
     public static int readInt() {
@@ -61,5 +64,9 @@ public class InputUtils {
         }
     }
 
+    public static void waitForEnter() {
+        System.out.print("Press Enter to continue...");
+        scanner.nextLine();
+    }
 
 }

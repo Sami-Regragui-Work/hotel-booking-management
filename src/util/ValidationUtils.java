@@ -8,24 +8,24 @@ public class ValidationUtils {
 
     private ValidationUtils() {}
 
-    public static boolean isNotEmpty(String value) {
-        return value != null && !value.trim().isEmpty();
+    public static boolean isNotBlank(String value) {
+        return value != null && !value.isBlank();
     }
 
     public static boolean isValidEmail(String email) {
-        return ValidationUtils.isNotEmpty(email) && EMAIL_PATTERN.matcher(email).matches();
+        return ValidationUtils.isNotBlank(email) && EMAIL_PATTERN.matcher(email).matches();
     }
 
     public static boolean isValidPassword(String password) {
-        return ValidationUtils.isNotEmpty(password) && password.length() >= 6;
+        return ValidationUtils.isNotBlank(password) && password.length() >= 6;
     }
 
     public static boolean isValidPhone(String phone) {
-        return ValidationUtils.isNotEmpty(phone) && PHONE_PATTERN.matcher(phone).matches();
+        return ValidationUtils.isNotBlank(phone) && PHONE_PATTERN.matcher(phone).matches();
     }
 
     public static boolean isValidFullName(String fullName) {
-        return ValidationUtils.isNotEmpty(fullName);
+        return ValidationUtils.isNotBlank(fullName);
     }
 
 }
