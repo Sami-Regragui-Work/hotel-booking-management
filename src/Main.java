@@ -1,21 +1,26 @@
 import model.Room;
+import repository.impl.InMemoryReservationRepository;
 import repository.impl.InMemoryRoomRepository;
 import repository.impl.InMemoryUserRepository;
 import service.AuthService;
 import service.RoomService;
 import util.DataSeeder;
+import util.DateUtils;
 import util.InputUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    static void main() {
         InMemoryUserRepository userRepository = new InMemoryUserRepository();
         InMemoryRoomRepository roomRepository = new InMemoryRoomRepository();
+        InMemoryReservationRepository reservationRepository = new InMemoryReservationRepository();
         DataSeeder.seed(roomRepository, userRepository);
 
         AuthService authService = new AuthService(userRepository);
-        RoomService roomService = new RoomService(roomRepository);
+        RoomService roomService = new RoomService(roomRepository, reservationRepository);
 
         while (true) {
             if (authService.isLoggedIn()) Main.showLoggedInMenu(authService, roomService);
@@ -72,7 +77,7 @@ public class Main {
 
         try {
             switch (choice) {
-                case 1 -> System.out.println("Not implemented yet\n");
+                case 1 -> Main.showSearchAvailableRooms(roomService);
                 case 2 -> Main.showAllRooms(roomService);
                 case 3 -> System.out.println("Not implemented yet\n");
                 case 4 -> System.out.println("Not implemented yet\n");
@@ -182,6 +187,41 @@ public class Main {
 
         authService.changePassword(oldPassword, newPassword);
         System.out.println("Password changed\n");
+        InputUtils.waitForEnter();
+    }
+
+    private static void showSearchAvailableRooms(RoomService roomService) throws IllegalArgumentException {
+        System.out.println("=".repeat(31));
+        System.out.println(center("SEARCH AVAILABLE ROOMS", 31));
+        System.out.println("=".repeat(31));
+        System.out.print("Check-in date (dd/MM/yyyy): ");
+        LocalDate checkIn = InputUtils.readDate();
+        System.out.print("Check-out date (dd/MM/yyyy): ");
+        LocalDate checkOut = InputUtils.readDate();
+        System.out.print("Number of guests: ");
+        int guests = InputUtils.readInt();
+        System.out.println();
+
+        List<Room> availableRooms = roomService.searchAvailableRooms(checkIn, checkOut, guests);
+        long nights = DateUtils.nightsBetween(checkIn, checkOut);
+
+        if (availableRooms.isEmpty()) {
+            System.out.println("No rooms available for the selected dates.\n");
+            InputUtils.waitForEnter();
+            return;
+        }
+
+        System.out.println("Available rooms");
+        for (Room room : availableRooms) {
+            BigDecimal total = room.getPricePerNight().multiply(BigDecimal.valueOf(nights));
+            System.out.println("Room " + room.getRoomNumber());
+            System.out.println("Type: " + room.getType());
+            System.out.println("Capacity: " + room.getCapacity());
+            System.out.println("Price/night: " + room.getPricePerNight() + " MAD");
+            System.out.println("Total for " + nights + " nights: " + total + " MAD");
+            System.out.println("-".repeat(31));
+        }
+        System.out.println();
         InputUtils.waitForEnter();
     }
 
